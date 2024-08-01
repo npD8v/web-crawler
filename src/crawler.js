@@ -40,20 +40,20 @@ exports.runCrawler = async () => {
       logger.info('Browser closed');
   
       await Promise.all(collectedData.map(async item => {
-        if (!item.link.startsWith('http')) {
-          item.link = new URL(item.link, url).href;
+        if (!item.catalogueLink.startsWith('http')) {
+          item.catalogueLink = new URL(item.link, url).href;
           logger.info(`Converted relative URL to absolute: ${item.link}`);
         }
   
-        const fileName = path.basename(item.link);
+        const fileName = path.basename(item.catalogueLink);
         const outputLocationPath = path.join(DOWNLOAD_DIR, fileName);
   
         await ensureDirExist(DOWNLOAD_DIR);
 
         try {
-          await downloadPDF(item.link, outputLocationPath);
+          await downloadPDF(item.catalogueLink, outputLocationPath);
         } catch (error) {
-          logger.error(`Failed to download ${item.link}: ${error.message}`);
+          logger.error(`Failed to download ${item.catalogueLink}: ${error.message}`);
         }
       }));
   
